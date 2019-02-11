@@ -8,3 +8,6 @@ set(CMAKE_AUTOMOC TRUE)
 
 add_executable(kasync_kitchensink kasync_kitchensink.cpp)
 target_link_libraries(kasync_kitchensink Threads::Threads Qt5::Core KAsync)
+
+add_executable(qfuture_kitchensink qfuture_kitchensink.cpp)
+target_link_libraries(qfuture_kitchensink Threads::Threads Qt5::Core)
