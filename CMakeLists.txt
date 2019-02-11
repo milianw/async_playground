@@ -3,5 +3,8 @@ project(async)
 
 find_package(Threads)
 find_package(Qt5 COMPONENTS Core)
-add_executable(async main.cpp)
-target_link_libraries(async Threads::Threads Qt5::Core)
+find_package(KAsync CONFIG)
+set(CMAKE_AUTOMOC TRUE)
+
+add_executable(kasync_kitchensink kasync_kitchensink.cpp)
+target_link_libraries(kasync_kitchensink Threads::Threads Qt5::Core KAsync)
