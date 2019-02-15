@@ -12,32 +12,33 @@ public:
 
     int a()
     {
-        qInfo() << "a runs in" << QThread::currentThreadId();
+        qDebug() << "start";
         QThread::currentThread()->sleep(1);
-        qInfo() << "a finished";
+        qDebug() << "end";
         return 42;
     }
 
     QString b(int i)
     {
-        qInfo() << "b runs in" << QThread::currentThreadId() << i;
+        qDebug() << "start" << i;
         QThread::currentThread()->msleep(100);
-        qInfo() << "b finished";
+        qDebug() << "end";
         return QString::number(i);
     }
 
-    void c()
+    QString c()
     {
-        qInfo() << "c runs in" << QThread::currentThreadId();
+        qDebug() << "start";
         QThread::currentThread()->msleep(200);
-        qInfo() << "c finished";
+        qDebug() << "end";
+        return QStringLiteral("Hello World, the answer is: ");
     }
 
     bool d()
     {
-        qInfo() << "d runs in" << QThread::currentThreadId();
+        qDebug() << "start";
         QThread::currentThread()->sleep(1);
-        qInfo() << "d finished";
+        qDebug() << "end";
         return true;
     }
 
@@ -97,8 +98,9 @@ WatchedQFuture<T> watch(const QFuture<T>& future)
 
 int main(int argc, char** argv)
 {
+    qputenv("QT_MESSAGE_PATTERN", "%{time process} %{threadid} %{type} %{function} (%{file}:%{line}):\n\t%{message}");
     QCoreApplication app(argc, argv);
-    qInfo() << "main thread is:" << QThread::currentThreadId();
+    qDebug() << "main thread started";
 
     Foo foo;
     // dislike: no built-in continuation
@@ -109,7 +111,7 @@ int main(int argc, char** argv)
 
     QTimer t;
     QObject::connect(&t, &QTimer::timeout, &t, []() {
-        qInfo() << "handling timer event";
+        qDebug() << "handling timer event";
     });
     t.start(100);
 

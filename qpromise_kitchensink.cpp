@@ -15,25 +15,25 @@ public:
 
     int a()
     {
-        qInfo() << "a runs in" << QThread::currentThreadId();
+        qDebug() << "start";
         QThread::currentThread()->sleep(1);
-        qInfo() << "a finished";
+        qDebug() << "end";
         return 42;
     }
 
     QString b(int i)
     {
-        qInfo() << "b runs in" << QThread::currentThreadId() << i;
+        qDebug() << "start" << i;
         QThread::currentThread()->msleep(100);
-        qInfo() << "b finished";
+        qDebug() << "end";
         return QString::number(i);
     }
 
     QString c()
     {
-        qInfo() << "c runs in" << QThread::currentThreadId();
+        qDebug() << "start";
         QThread::currentThread()->msleep(200);
-        qInfo() << "c finished";
+        qDebug() << "end";
         return QStringLiteral("Hello World, the answer is: ");
     }
 
@@ -88,8 +88,9 @@ QPromise<QPair<T1, T2>> qAwaitAll(const QPromise<T1>& p1, const QPromise<T2>& p2
 
 int main(int argc, char** argv)
 {
+    qputenv("QT_MESSAGE_PATTERN", "%{time process} %{threadid} %{type} %{function} (%{file}:%{line}):\n\t%{message}");
     QCoreApplication app(argc, argv);
-    qInfo() << "main thread is:" << QThread::currentThreadId();
+    qDebug() << "main thread started";
 
     // run some task and then eventually quit
     Foo foo;
@@ -109,7 +110,7 @@ int main(int argc, char** argv)
     // run a timer to show that the main thread isn't blocked
     QTimer t;
     QObject::connect(&t, &QTimer::timeout, &t, []() {
-        qInfo() << "handling timer event";
+        qDebug() << "handling timer event";
     });
     t.start(100);
 
